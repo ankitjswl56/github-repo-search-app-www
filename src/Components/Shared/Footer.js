@@ -5,7 +5,7 @@ class Footer extends React.PureComponent{
     return(
       <div className="container-fluid">
         <div className="container">
-          Footer
+          <p className="text-center"></p>
         </div>
       </div>
     );
