@@ -12,7 +12,9 @@ class HomePage extends React.PureComponent{
       searchResult: [],
       displayResult: [],
       buttonDisplay: true,
-      spinner: false
+      spinner: false,
+      totalValue: 30,
+      currentPage: 1,
     }
   }
   getSearchKeyWord = (event) =>{
@@ -56,7 +58,7 @@ class HomePage extends React.PureComponent{
     this.setState({spinner: false})
   }
   goToNextPage = async () => {
-    let { searchResult, per_page, buttonDisplay } = this.state;
+    let { searchResult, per_page, buttonDisplay, currentPage } = this.state;
     this.setState({spinner: true})
     if(searchResult.length < per_page){
       this.setState({buttonDisplay : !buttonDisplay});
@@ -67,15 +69,17 @@ class HomePage extends React.PureComponent{
     }
     const response = await this.Fetch();
     searchResult = [...searchResult, ...response.message.items]
+    currentPage = currentPage + 1
     this.setState({
       displayResult: searchResult,
+      currentPage,
      })
     window.scrollTo(0,0);
     this.forceUpdate();
     this.setState({spinner: false})
   }
   render(){
-    const { displayResult, per_page, spinner } = this.state
+    const { displayResult, per_page, spinner, totalPage, currentPage } = this.state
     return(
       <PrimaryLayout className="container-fluid">
         <div style={{position: 'relative', height: '80vh'}}>
@@ -132,7 +136,12 @@ class HomePage extends React.PureComponent{
                       )
                     ))
                   }
-                  <div className="d-flex justify-content-center mt-5"><button className="btn btn-primary mb-5" onClick={()=>{this.goToNextPage()}}>Next</button></div>
+                  <div className="d-flex justify-content-center mt-5">
+                    <div class="d-flex justify-content-around">
+                      <p style={{marginRight: '15px'}}>Page: {currentPage}</p>
+                      <button className="btn btn-primary mb-5" onClick={()=>{this.goToNextPage()}}>Next</button>
+                    </div>
+                  </div>
                 </div>
               )
             )
