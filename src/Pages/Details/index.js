@@ -11,7 +11,9 @@ class DetailsPage extends React.PureComponent{
     return(
       <PrimaryLayout className="container-fluid">
         <div className="container">
-          DetailsPage
+          <div className="d-flex justify-content-center" style={{marginTop:'20vh'}}>
+          <h1>DetailsPage: On Progress !!!</h1>
+          </div>
         </div>
       </PrimaryLayout>
     );
