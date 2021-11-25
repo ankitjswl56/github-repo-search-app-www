@@ -30,6 +30,15 @@ class HomePage extends React.PureComponent{
       sort: event.target.value
     })
   }
+  Fetch = async () => {
+    const { search, sort } = this.state;
+    const details = {
+      search: search,
+      _sort: sort
+    }
+    const response = await Search.Search_Repo(details);
+    return response
+  }
   onSubmitForm = async (event) => {
     event.preventDefault();
     const { search, per_page, sort, spinner } = this.state;
@@ -38,11 +47,7 @@ class HomePage extends React.PureComponent{
       alert('Please Fill the form complete'); 
       return
     };
-    const details = {
-      search: search,
-      _sort: sort
-    }
-    const response = await Search.Search_Repo(details);
+    const response = await this.Fetch()
     console.log(response)
     this.setState({
       searchResult: response.message.items,
@@ -50,7 +55,7 @@ class HomePage extends React.PureComponent{
     })
     this.setState({spinner: false})
   }
-  goToNextPage = () => {
+  goToNextPage = async () => {
     let { searchResult, per_page, buttonDisplay } = this.state;
     this.setState({spinner: true})
     if(searchResult.length < per_page){
@@ -60,6 +65,8 @@ class HomePage extends React.PureComponent{
     for(let i=0; i< per_page; i++){
       searchResult.shift()
     }
+    const response = await this.Fetch();
+    searchResult = [...searchResult, ...response.message.items]
     this.setState({
       displayResult: searchResult,
      })
